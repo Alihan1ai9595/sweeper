@@ -81,7 +81,7 @@ fi
 if exists paccache;then
 paccache -ruk0;paccache -rk1
 # Delete removed packages from disk, keep 2 recent versions
-# USes pacman-contrib
+# Uses pacman-contrib
 fi
 
 if exists apt-get;then # Older manager of Debian family
