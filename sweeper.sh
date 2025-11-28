@@ -101,6 +101,6 @@ yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
 fi
 
 echo -e "\n\033[38;5;46m==========================================${RESET}"
-echo -e "\n\033[38;5;46m      SYSTEM CLEANING COMPLETE!           ${RESET}"
-echo -e "\n\033[38;5;46m==========================================${RESET}"
+echo -e "\033[38;5;46m      SYSTEM CLEANING COMPLETE!           ${RESET}"
+echo -e "\033[38;5;46m==========================================${RESET}"
 read
