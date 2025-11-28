@@ -19,11 +19,12 @@ RESET="\e[0m"
 
 # If script is not run as root, restart it as root automatically.
 if [ $EUID -ne 0 ];then
-   echo -e "${YELLOW}Elevation needed. Restarting with sudo...${RESET}"
+   echo -e "${YELLOW}Elevation needed. Restarting with sudo..${RESET}"
    exec sudo /bin/bash "$0" "$@"
 fi
 
-echo -e "\033[38;5;213mSweeper by\033[0m \033[38;5;171mal1h3n${RESET} | \033[38;5;141mPART${RESET} of \033[38;5;226mCleanus Pack"
+echo -e "\033[38;5;213mSweeper by\033[0m \033[38;5;171mal1h3n${RESET} | \033[38;5;141mPART${RESET} of \033[38;5;226mCleanus Pack${RESET}"
+echo You might have to use sudo command before launching the script.
 echo -e "${GREEN}=========================================="
 echo -e "    STARTING SYSTEM MAINTENANCE TASK      "
 echo -e "==========================================${RESET}"
@@ -50,7 +51,7 @@ exists(){
 }
 
 if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
-pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc
+pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
 
 elif exists paccache;then
 paccache -ruk0;paccache -rk1
@@ -74,6 +75,10 @@ elif exists zypper;then # OpenSUSE
 zypper refresh;zypper dist-upgrade -y
 zypper clean --all
 
+elif exists emerge;then # Gentoo
+emerge -a --sync;emerge -avuDN @world;emerge -a -c --ask --depclean
+eclean-dist -d;eclean-pkg
+
 else
 echo There is no appropiate package manager for your system.
 fi
@@ -86,11 +91,15 @@ if exists flatpak;then # Additional PMs
 flatpak update;flatpak uninstall --unused
 fi
 
-if exists yay;then # ONe of the most useful
-yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc
+if exists snap;then
+yes | snap refresh;rm -rf /var/lib/snapd/cache/*
 fi
 
-echo -e "\n\033[38;5;46m=========================================="
-echo -e "      SYSTEM CLEANING COMPLETE!           "
-echo -e "=========================================="
+if exists yay;then # ONe of the most useful
+yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
+fi
+
+echo -e "\n\033[38;5;46m==========================================${RESET}"
+echo -e "      SYSTEM CLEANING COMPLETE!           ${RESET}"
+echo -e "==========================================${RESET}"
 read
