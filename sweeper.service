@@ -11,5 +11,5 @@ Type=simple
 WantedBy=multi-user.target
 
 # sudo systemctl daemon-reload
-# sudo systemctl enable myscript.service
-# sudo systemctl start myscript.service
+# sudo systemctl enable sweeper.service
+# sudo systemctl start sweeper.service
