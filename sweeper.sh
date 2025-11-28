@@ -53,11 +53,6 @@ exists(){
 if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
 pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
 
-elif exists paccache;then
-paccache -ruk0;paccache -rk1
-# Delete removed packages from disk, keep 2 recent versions
-# USes pacman-contrib
-
 elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS
 apt full-upgrade -y;apt autoremove -y;apt clean
 
@@ -81,6 +76,12 @@ eclean-dist -d;eclean-pkg
 
 else
 echo There is no appropiate package manager for your system.
+fi
+
+if exists paccache;then
+paccache -ruk0;paccache -rk1
+# Delete removed packages from disk, keep 2 recent versions
+# USes pacman-contrib
 fi
 
 if exists apt-get;then # Older manager of Debian family
