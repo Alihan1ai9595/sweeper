@@ -1,106 +1,67 @@
-# MM    MM              dd           bb                         lll  1  hh      333333
-# MMM  MMM   aa aa      dd   eee     bb      yy   yy      aa aa lll 111 hh         3333 nn nnn
-# MM MM MM  aa aaa  dddddd ee   e    bbbbbb  yy   yy     aa aaa lll  11 hhhhhh    3333  nnn  nn
-# MM    MM aa  aaa dd   dd eeeee     bb   bb  yyyyyy    aa  aaa lll  11 hh   hh     333 nn   nn
-# MM    MM  aaa aa  dddddd  eeeee    bbbbbb       yy     aaa aa lll 111 hh   hh 333333  nn   nn
-#                                             yyyyy
-# Support - al1h3n(tg,ds) | Donate me - paypal.me/al1h3n
-# Cleaner.sh v1 - First launch.
-# Part of the Cleanus Pack.
-# ==============================================================================
-
-#!/bin/bash
-echo -e "\033]0;Sweeper v1 - al1h3n | PART of Cleanus Pack v1\007"
-GREEN="\e[32m"
-YELLOW="\e[33m"
-RED="\e[31m"
-BLUE="\e[34m"
-RESET="\e[0m"
-
-# If script is not run as root, restart it as root automatically.
-if [ $EUID -ne 0 ];then
-   echo -e "${YELLOW}Elevation needed. Restarting with sudo..${RESET}"
-   exec sudo /bin/bash "$0" "$@"
-fi
-
-echo -e "\033[38;5;213mSweeper by\033[0m \033[38;5;171mal1h3n${RESET} | \033[38;5;141mPART${RESET} of \033[38;5;226mCleanus Pack${RESET}"
-echo You might have to use sudo command before launching the script.
-echo -e "${GREEN}=========================================="
-echo -e "    STARTING SYSTEM MAINTENANCE TASK      "
-echo -e "==========================================${RESET}"
-
-echo -e "\n\033[38;5;37m[1/2] Cleaning kernel (trash, logs, tmp, swap)...${RESET}"
-echo " -> Cleaning temporary files..."
-rm -rf /tmp/*
-journalctl --vacuum-time=1d
-for user_dir in /home/*;do
-    if [ -d $user_dir ];then
-        user_name=$(basename $user_dir)
-        echo -e " -> Cleaning trash & cache for \033[38;5;197m$user_name${RESET}"
-        rm -rf $user_dir/.local/share/Trash/*
-        rm -rf $user_dir/.cache/*
-    fi
-done
-sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches'
-swapoff -a #&&swapon -a
-# Only works if you have enough RAM to hold current swap data.
-
-echo -e "\n\033[38;5;33m[2/2] CLeaning package managers...${RESET}"
-exists(){
-	command -v $1&>/dev/null
-}
-
-if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
-pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
-
-elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS
-apt full-upgrade -y;apt autoremove -y;apt clean
-
-elif exists dnf;then # Fedora, RedHat
-dnf upgrade --refresh -y
-dnf clean all;dnf autoremove -y
-dnf repoquery --extras --qf '%{name}' | xargs dnf remove
-package-cleanup --orphans --leaves --cleandupes --noprompt
-
-elif exists apk;then # Alpine
-apk update;apk upgrade
-apk cache purge;apk del
-
-elif exists zypper;then # OpenSUSE
-zypper refresh;zypper dist-upgrade -y
-zypper clean --all
-
-elif exists emerge;then # Gentoo
-emerge -a --sync;emerge -avuDN @world;emerge -a -c --ask --depclean
-eclean-dist -d;eclean-pkg
-
-else
-echo There is no appropiate package manager for your system.
-fi
-
-if exists paccache;then
-paccache -ruk0;paccache -rk1
-# Delete removed packages from disk, keep 2 recent versions
-# Uses pacman-contrib
-fi
-
-if exists apt-get;then # Older manager of Debian family
-apt-get full-upgrade -y;apt-get autoremove -y;apt-get clean
-fi
-
-if exists flatpak;then # Additional PMs
-flatpak update;flatpak uninstall --unused
-fi
-
-if exists snap;then
-yes | snap refresh;rm -rf /var/lib/snapd/cache/*
-fi
-
-if exists yay;then # ONe of the most useful
-yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
-fi
-
-echo -e "\n\033[38;5;46m==========================================${RESET}"
-echo -e "\033[38;5;46m      SYSTEM CLEANING COMPLETE!           ${RESET}"
-echo -e "\033[38;5;46m==========================================${RESET}"
-read
+bash -c "$(base64 -d <<< "\
+IyBNTSAgICBNTSAgICAgICAgICAgICAgZGQgICAgICAgICAgIGJiICAgICAgICAgICAgICAgICAg
+ICAgICAgIGxsbCAgMSAgaGggICAgICAzMzMzMzMKIyBNTU0gIE1NTSAgIGFhIGFhICAgICAgZGQg
+ICBlZWUgICAgIGJiICAgICAgeXkgICB5eSAgICAgIGFhIGFhIGxsbCAxMTEgaGggICAgICAgICAz
+MzMzIG5uIG5ubgojIE1NIE1NIE1NICBhYSBhYWEgIGRkZGRkZCBlZSAgIGUgICAgYmJiYmJiICB5
+eSAgIHl5ICAgICBhYSBhYWEgbGxsICAxMSBoaGhoaGggICAgMzMzMyAgbm5uICBubgojIE1NICAg
+IE1NIGFhICBhYWEgZGQgICBkZCBlZWVlZSAgICAgYmIgICBiYiAgeXl5eXl5ICAgIGFhICBhYWEg
+bGxsICAxMSBoaCAgIGhoICAgICAzMzMgbm4gICBubgojIE1NICAgIE1NICBhYWEgYWEgIGRkZGRk
+ZCAgZWVlZWUgICAgYmJiYmJiICAgICAgIHl5ICAgICBhYWEgYWEgbGxsIDExMSBoaCAgIGhoIDMz
+MzMzMyAgbm4gICBubgojICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgeXl5eXkKIyBTdXBwb3J0IC0gYWwxaDNuKHRnLGRzKSB8IERvbmF0ZSBtZSAtIHBheXBhbC5t
+ZS9hbDFoM24KIyBDbGVhbmVyLnNoIHYxIC0gRmlyc3QgbGF1bmNoLgojIFBhcnQgb2YgdGhlIENs
+ZWFudXMgUGFjay4KIyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KIyEvYmluL2Jhc2gKZWNobyAtZSAi
+XDAzM10wO1N3ZWVwZXIgdjEgLSBhbDFoM24gfCBQQVJUIG9mIENsZWFudXMgUGFjayB2MVwwMDci
+CkdSRUVOPSJcZVszMm0iCllFTExPVz0iXGVbMzNtIgpSRUQ9IlxlWzMxbSIKQkxVRT0iXGVbMzRt
+IgpSRVNFVD0iXGVbMG0iCiMgSWYgc2NyaXB0IGlzIG5vdCBydW4gYXMgcm9vdCwgcmVzdGFydCBp
+dCBhcyByb290IGF1dG9tYXRpY2FsbHkuCmlmIFsgJEVVSUQgLW5lIDAgXTt0aGVuCiAgIGVjaG8g
+LWUgIiR7WUVMTE9XfUVsZXZhdGlvbiBuZWVkZWQuIFJlc3RhcnRpbmcgd2l0aCBzdWRvLi4ke1JF
+U0VUfSIKICAgZXhlYyBzdWRvIC9iaW4vYmFzaCAiJDAiICIkQCIKZmkKZWNobyAtZSAiXDAzM1sz
+ODs1OzIxM21Td2VlcGVyIGJ5XDAzM1swbSBcMDMzWzM4OzU7MTcxbWFsMWgzbiR7UkVTRVR9IHwg
+XDAzM1szODs1OzE0MW1QQVJUJHtSRVNFVH0gb2YgXDAzM1szODs1OzIyNm1DbGVhbnVzIFBhY2sk
+e1JFU0VUfSIKZWNobyBZb3UgbWlnaHQgaGF2ZSB0byB1c2Ugc3VkbyBjb21tYW5kIGJlZm9yZSBs
+YXVuY2hpbmcgdGhlIHNjcmlwdC4KZWNobyAtZSAiJHtHUkVFTn09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0iCmVjaG8gLWUgIiAgICBTVEFSVElORyBTWVNURU0gTUFJ
+TlRFTkFOQ0UgVEFTSyAgICAgICIKZWNobyAtZSAiPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09JHtSRVNFVH0iCmVjaG8gLWUgIlxuXDAzM1szODs1OzM3bVsxLzJdIENs
+ZWFuaW5nIGtlcm5lbCAodHJhc2gsIGxvZ3MsIHRtcCwgc3dhcCkuLi4ke1JFU0VUfSIKZWNobyAi
+IC0+IENsZWFuaW5nIHRlbXBvcmFyeSBmaWxlcy4uLiIKcm0gLXJmIC90bXAvKgpqb3VybmFsY3Rs
+IC0tdmFjdXVtLXRpbWU9MWQKZm9yIHVzZXJfZGlyIGluIC9ob21lLyo7ZG8KICAgIGlmIFsgLWQg
+JHVzZXJfZGlyIF07dGhlbgogICAgICAgIHVzZXJfbmFtZT0kKGJhc2VuYW1lICR1c2VyX2RpcikK
+ICAgICAgICBlY2hvIC1lICIgLT4gQ2xlYW5pbmcgdHJhc2ggJiBjYWNoZSBmb3IgXDAzM1szODs1
+OzE5N20kdXNlcl9uYW1lJHtSRVNFVH0iCiAgICAgICAgcm0gLXJmICR1c2VyX2Rpci8ubG9jYWwv
+c2hhcmUvVHJhc2gvKgogICAgICAgIHJtIC1yZiAkdXNlcl9kaXIvLmNhY2hlLyoKICAgIGZpCmRv
+bmUKc3luYztzaCAtYyAnZWNobyAzID4gL3Byb2Mvc3lzL3ZtL2Ryb3BfY2FjaGVzJwpzd2Fwb2Zm
+IC1hICMmJnN3YXBvbiAtYQojIE9ubHkgd29ya3MgaWYgeW91IGhhdmUgZW5vdWdoIFJBTSB0byBo
+b2xkIGN1cnJlbnQgc3dhcCBkYXRhLgplY2hvIC1lICJcblwwMzNbMzg7NTszM21bMi8yXSBDTGVh
+bmluZyBwYWNrYWdlIG1hbmFnZXJzLi4uJHtSRVNFVH0iCmV4aXN0cygpewoJY29tbWFuZCAtdiAk
+MSY+L2Rldi9udWxsCn0KaWYgZXhpc3RzIHBhY21hbjt0aGVuICMgQXJjaCwgRW5kZWF2b3VyLCBD
+YWNoeSwgTWFuamFybyBldGMuCnBhY21hbiAtU3l1IC0tbm9jb25maXJtO3BhY21hbiAtUnVucyAk
+KHBhY21hbiAtUWR0cSkgLS1ub2NvbmZpcm07cGFjbWFuIC1TY2MgLS1ub2NvbmZpcm0KZWxpZiBl
+eGlzdHMgYXB0O3RoZW4gIyBEZWJpYW4sIFVidW50dSwgTWludCwgRUxlbWVudGFyeU9TCmFwdCBm
+dWxsLXVwZ3JhZGUgLXk7YXB0IGF1dG9yZW1vdmUgLXk7YXB0IGNsZWFuCmVsaWYgZXhpc3RzIGRu
+Zjt0aGVuICMgRmVkb3JhLCBSZWRIYXQKZG5mIHVwZ3JhZGUgLS1yZWZyZXNoIC15CmRuZiBjbGVh
+biBhbGw7ZG5mIGF1dG9yZW1vdmUgLXkKZG5mIHJlcG9xdWVyeSAtLWV4dHJhcyAtLXFmICcle25h
+bWV9JyB8IHhhcmdzIGRuZiByZW1vdmUKcGFja2FnZS1jbGVhbnVwIC0tb3JwaGFucyAtLWxlYXZl
+cyAtLWNsZWFuZHVwZXMgLS1ub3Byb21wdAplbGlmIGV4aXN0cyBhcGs7dGhlbiAjIEFscGluZQph
+cGsgdXBkYXRlO2FwayB1cGdyYWRlCmFwayBjYWNoZSBwdXJnZTthcGsgZGVsCmVsaWYgZXhpc3Rz
+IHp5cHBlcjt0aGVuICMgT3BlblNVU0UKenlwcGVyIHJlZnJlc2g7enlwcGVyIGRpc3QtdXBncmFk
+ZSAteQp6eXBwZXIgY2xlYW4gLS1hbGwKZWxpZiBleGlzdHMgZW1lcmdlO3RoZW4gIyBHZW50b28K
+ZW1lcmdlIC1hIC0tc3luYztlbWVyZ2UgLWF2dUROIEB3b3JsZDtlbWVyZ2UgLWEgLWMgLS1hc2sg
+LS1kZXBjbGVhbgplY2xlYW4tZGlzdCAtZDtlY2xlYW4tcGtnCmVsc2UKZWNobyBUaGVyZSBpcyBu
+byBhcHByb3BpYXRlIHBhY2thZ2UgbWFuYWdlciBmb3IgeW91ciBzeXN0ZW0uCmZpCmlmIGV4aXN0
+cyBwYWNjYWNoZTt0aGVuCnBhY2NhY2hlIC1ydWswO3BhY2NhY2hlIC1yazEKIyBEZWxldGUgcmVt
+b3ZlZCBwYWNrYWdlcyBmcm9tIGRpc2ssIGtlZXAgMiByZWNlbnQgdmVyc2lvbnMKIyBVc2VzIHBh
+Y21hbi1jb250cmliCmZpCmlmIGV4aXN0cyBhcHQtZ2V0O3RoZW4gIyBPbGRlciBtYW5hZ2VyIG9m
+IERlYmlhbiBmYW1pbHkKYXB0LWdldCBmdWxsLXVwZ3JhZGUgLXk7YXB0LWdldCBhdXRvcmVtb3Zl
+IC15O2FwdC1nZXQgY2xlYW4KZmkKaWYgZXhpc3RzIGZsYXRwYWs7dGhlbiAjIEFkZGl0aW9uYWwg
+UE1zCmZsYXRwYWsgdXBkYXRlO2ZsYXRwYWsgdW5pbnN0YWxsIC0tdW51c2VkCmZpCmlmIGV4aXN0
+cyBzbmFwO3RoZW4KeWVzIHwgc25hcCByZWZyZXNoO3JtIC1yZiAvdmFyL2xpYi9zbmFwZC9jYWNo
+ZS8qCmZpCmlmIGV4aXN0cyB5YXk7dGhlbiAjIE9OZSBvZiB0aGUgbW9zdCB1c2VmdWwKeWF5IC1T
+eXUgLS1ub2NvbmZpcm07eWF5IC1SdW5zICQoeWF5IC1RZHRxKSAtLW5vY29uZmlybTt5YXkgLVNj
+YyAtLW5vY29uZmlybQpmaQplY2hvIC1lICJcblwwMzNbMzg7NTs0Nm09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT0ke1JFU0VUfSIKZWNobyAtZSAiXDAzM1szODs1OzQ2
+bSAgICAgIFNZU1RFTSBDTEVBTklORyBDT01QTEVURSEgICAgICAgICAgICR7UkVTRVR9IgplY2hv
+IC1lICJcMDMzWzM4OzU7NDZtPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09JHtSRVNFVH0iCnJlYWQK")" bash "$@"
