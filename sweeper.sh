@@ -24,7 +24,7 @@ if [ $EUID -ne 0 ];then
 fi
 
 echo -e "\033[38;5;213mSweeper by\033[0m \033[38;5;171mal1h3n${RESET} | \033[38;5;141mPART${RESET} of \033[38;5;226mCleanus Pack${RESET}"
-echo You might have to use sudo command before launching the script.
+echo You have to use sudo command before launching the script.
 echo -e "${GREEN}=========================================="
 echo -e "    STARTING SYSTEM MAINTENANCE TASK      "
 echo -e "==========================================${RESET}"
@@ -41,7 +41,7 @@ for user_dir in /home/*;do
         rm -rf $user_dir/.cache/*
     fi
 done
-sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
 swapoff -a #&&swapon -a
 # Only works if you have enough RAM to hold current swap data.
 
@@ -53,13 +53,13 @@ exists(){
 if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
 pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
 
-elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS
+elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS, Kali
 apt update;apt full-upgrade -y;apt autoremove -y;apt clean;apt autoclean
 
 elif exists dnf;then # Fedora, RedHat
 dnf upgrade --refresh -y
 dnf clean all;dnf autoremove -y
-dnf repoquery --extras --qf '%{name}' | xargs dnf remove
+dnf repoquery --extras --qf '%{name}'|xargs dnf remove
 package-cleanup --orphans --leaves --cleandupes --noprompt
 
 elif exists apk;then # Alpine
@@ -76,6 +76,12 @@ eclean-dist -d;eclean-pkg
 
 elif exists xbps-install;then # Void Linux
 xbps-install -Syu;xbps-remove -Ooy;vkpurge rm all
+
+elif exists eopkg;then # Solis
+eopkg ur -y;eopkg upgrade -y;eopkg rmo;eopkg dc
+
+elif exists slackpkg;then # Slackware
+yes|slackpkg update;yes|slackpkg upgrade-all;slackpkg clean-system
 
 else
 echo There is no appropiate package manager for your system.
@@ -96,10 +102,15 @@ flatpak update;flatpak uninstall --unused
 fi
 
 if exists snap;then
-yes | snap refresh;rm -rf /var/lib/snapd/cache/*
+yes|snap refresh;rm -rf /var/lib/snapd/cache/*
 fi
 
-if exists yay;then # ONe of the most useful
+if exists brew;then
+brew update;brew upgrade;brew upgrade --cask
+brew autoremove;brew cleanup --prune=all
+fi
+
+if exists yay;then # One of the most useful
 yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
 fi
 
