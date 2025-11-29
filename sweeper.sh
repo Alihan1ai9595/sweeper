@@ -54,7 +54,7 @@ if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
 pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
 
 elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS
-apt full-upgrade -y;apt autoremove -y;apt clean
+apt update;apt full-upgrade -y;apt autoremove -y;apt clean;apt autoclean
 
 elif exists dnf;then # Fedora, RedHat
 dnf upgrade --refresh -y
@@ -73,6 +73,9 @@ zypper clean --all
 elif exists emerge;then # Gentoo
 emerge -a --sync;emerge -avuDN @world;emerge -a -c --ask --depclean
 eclean-dist -d;eclean-pkg
+
+elif exists xbps-install;then # Void Linux
+xbps-install -Syu;xbps-remove -Ooy;vkpurge rm all
 
 else
 echo There is no appropiate package manager for your system.
