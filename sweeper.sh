@@ -98,7 +98,7 @@ apt-get full-upgrade -y;apt-get autoremove -y;apt-get clean
 fi
 
 if exists flatpak;then # Additional PMs
-flatpak update;flatpak uninstall --unused
+flatpak update -y;flatpak uninstall -y --unused
 fi
 
 if exists snap;then
