@@ -45,7 +45,7 @@ sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
 swapoff -a #&&swapon -a
 # Only works if you have enough RAM to hold current swap data.
 
-echo -e "\n\033[38;5;33m[2/2] CLeaning package managers...${RESET}"
+echo -e "\n\033[38;5;33m[2/2] Cleaning package managers...${RESET}"
 exists(){
 	command -v $1&>/dev/null
 }
@@ -117,4 +117,3 @@ fi
 echo -e "\n\033[38;5;46m==========================================${RESET}"
 echo -e "\033[38;5;46m      SYSTEM CLEANING COMPLETE!           ${RESET}"
 echo -e "\033[38;5;46m==========================================${RESET}"
-read
