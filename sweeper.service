@@ -12,4 +12,8 @@ WantedBy=multi-user.target
 
 # sudo systemctl daemon-reload
 # sudo systemctl enable sweeper.service
-# sudo systemctl start sweeper.service
+# sudo systemctl start sweeper
+
+# To revert add remove program from startup:
+# sudo systemctl stop sweeper
+# sudo systemctl disable sweeper
