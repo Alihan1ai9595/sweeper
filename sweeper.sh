@@ -42,7 +42,7 @@ for user_dir in /home/*;do
     fi
 done
 sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
-swapoff -a #&&swapon -a
+swapoff -a&&swapon -a
 # Only works if you have enough RAM to hold current swap data.
 
 echo -e "\n\033[38;5;33m[2/2] Cleaning package managers...${RESET}"
