@@ -8,7 +8,7 @@ On pacman use "-Runs ID"
 On apk --no-cache
 
 # Questions:
-Updating packages on MANAGER_NAME OS_NAME
-Clearing cache on MANAGER_NAME OS_NAME
-Clearing orphant packages on MANAGER_NAME OS_NAME
-How to bypass Yes/No prompt on MANAGER_NAME OS_NAME
+# Updating packages on MANAGER_NAME OS_NAME
+# Clearing cache on MANAGER_NAME OS_NAME
+# Clearing orphant packages on MANAGER_NAME OS_NAME
+# How to bypass Yes/No prompt on MANAGER_NAME OS_NAME
