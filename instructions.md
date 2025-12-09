@@ -1,6 +1,6 @@
- git clone -b unobfusticated https://github.com/Alihan1ai9595/sweeper
- For obfustication used: github.com/KevCui/obashfuscator
- Here we must remove code with sudo, type "sudo bash obashfuscator -f sweeper.sh"
+git clone -b unobfusticated https://github.com/Alihan1ai9595/sweeper
+\nFor obfustication used: github.com/KevCui/obashfuscator
+\nHere we must remove code with sudo, type "sudo bash obashfuscator -f sweeper.sh"
 
 Deleting packages:
 On flatpak use "uninstall ID --delete-data"
