@@ -43,7 +43,7 @@ for user_dir in /home/*;do
         echo -e " -> Cleaning trash & cache for \033[38;5;197m$user_name${RESET}"
         rm -rf $user_dir/.local/share/Trash/*
         rm -rf $user_dir/.cache/*
-		echo $(saved ~/.cache)$(saved ~/.local/share/Trash)
+		echo -e "$(GREEN)Saved space: $(du -sh $1) $(RESET)"
     fi
 done
 sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
