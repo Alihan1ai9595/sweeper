@@ -5,7 +5,7 @@
 # MM    MM  aaa aa  dddddd  eeeee    bbbbbb       yy     aaa aa lll 111 hh   hh 333333  nn   nn
 #                                             yyyyy
 # Support - al1h3n(tg,ds) | Donate me - paypal.me/al1h3n
-# Sweeper v1.0.2 - Additional output..
+# Sweeper v1.0.2 - Additional output.
 # Part of the Cleanus Pack.
 # ==============================================================================
 
