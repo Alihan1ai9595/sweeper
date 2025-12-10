@@ -5,7 +5,7 @@
 # MM    MM  aaa aa  dddddd  eeeee    bbbbbb       yy     aaa aa lll 111 hh   hh 333333  nn   nn
 #                                             yyyyy
 # Support - al1h3n(tg,ds) | Donate me - paypal.me/al1h3n
-# Sweeper v1.0.1 - FIxed flatpak prompts.
+# Sweeper v1.0.2 - Additional output..
 # Part of the Cleanus Pack.
 # ==============================================================================
 
@@ -39,6 +39,7 @@ for user_dir in /home/*;do
         echo -e " -> Cleaning trash & cache for \033[38;5;197m$user_name${RESET}"
         rm -rf $user_dir/.local/share/Trash/*
         rm -rf $user_dir/.cache/*
+		echo Space saved: $(du -sh ~/.cache), $(du -sh ~/.local/share/Trash)
     fi
 done
 sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
@@ -89,6 +90,7 @@ fi
 
 if exists paccache;then
 paccache -ruk0;paccache -rk1
+echo Space saved: $(du -sh /var/cache/pacman/pkg)
 # Delete removed packages from disk, keep 2 recent versions
 # Uses pacman-contrib
 fi
