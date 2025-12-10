@@ -30,7 +30,7 @@ echo -e "    STARTING SYSTEM MAINTENANCE TASK      "
 echo -e "==========================================${RESET}"
 
 saved(){
-	echo -e "$(GREEN)Saved space: $(du -sh $1) $(RESET)\n" 
+	echo -e "$(GREEN)Saved space: $(du -sh $1) $(RESET)" 
 }
 
 echo -e "\n\033[38;5;37m[1/2] Cleaning kernel (trash, logs, tmp, swap)...${RESET}"
