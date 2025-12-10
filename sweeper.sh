@@ -30,7 +30,7 @@ echo -e "    STARTING SYSTEM MAINTENANCE TASK      "
 echo -e "==========================================${RESET}"
 
 saved(){
-	echo -e "$(GREEN)Saved space: $(du -sh $1) $(RESET)" 
+	echo -e "${GREEN}Saved space: $(du -sh $1) ${RESET}"
 }
 
 echo -e "\n\033[38;5;37m[1/2] Cleaning kernel (trash, logs, tmp, swap)...${RESET}"
@@ -43,7 +43,7 @@ for user_dir in /home/*;do
         echo -e " -> Cleaning trash & cache for \033[38;5;197m$user_name${RESET}"
         rm -rf $user_dir/.local/share/Trash/*
         rm -rf $user_dir/.cache/*
-		echo -e "$(GREEN)Saved space: $(du -sh $1) $(RESET)"
+		echo -e "${GREEN}$(saved ~/.cache)\n$(saved ~/.local/share/Trash)${RESET}"
     fi
 done
 sync;sh -c 'echo 3 > /proc/sys/vm/drop_caches' # 3 is the best.
@@ -94,7 +94,7 @@ fi
 
 if exists paccache;then
 paccache -ruk0;paccache -rk1
-echo Space saved: $(saved /var/cache/pacman/pkg).
+echo -e "${GREEN}Space saved: $(saved /var/cache/pacman/pkg)${RESET}"
 # Delete removed packages from disk, keep 2 recent versions
 # Uses pacman-contrib
 fi
