@@ -56,7 +56,7 @@ exists(){
 }
 
 if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
-pacman -Syyu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
+pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
 
 elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS, Kali. Includes dpkg as well.
 apt update;apt full-upgrade -y;apt autoremove -y;apt clean;apt autoclean
