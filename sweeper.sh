@@ -5,7 +5,7 @@
 # MM    MM  aaa aa  dddddd  eeeee    bbbbbb       yy     aaa aa lll 111 hh   hh 333333  nn   nn
 #                                             yyyyy
 # Support - al1h3n(tg,ds) | Donate me - paypal.me/al1h3n
-# Sweeper v1.0.3 - Paru was added.
+# Sweeper v1.0.3 - Paru and BSD were added, now not using elif cause user might have more that 1 package manager.
 # Part of the Cleanus Pack.
 # ==============================================================================
 
@@ -35,6 +35,7 @@ saved(){
 
 echo -e "\n\033[38;5;37m[1/2] Cleaning kernel (trash, logs, tmp, swap)...${RESET}"
 echo " -> Cleaning temporary files..."
+fc-cache -rv
 rm -rf /tmp/*
 journalctl --vacuum-time=1d
 for user_dir in /home/*;do
@@ -51,45 +52,57 @@ swapoff -a&&swapon -a
 # Only works if you have enough RAM to hold current swap data.
 
 echo -e "\n\033[38;5;33m[2/2] Cleaning package managers...${RESET}"
+
 exists(){
 	command -v $1&>/dev/null
 }
 
 if exists pacman;then # Arch, Endeavour, Cachy, Manjaro etc.
 pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --noconfirm
+fi
 
-elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS, Kali. Includes dpkg as well.
+if exists apt;then # Debian, Ubuntu, Mint, ELementaryOS, Kali. Includes dpkg as well.
 apt update;apt full-upgrade -y;apt autoremove -y;apt clean;apt autoclean
+fi
 
-elif exists dnf;then # Fedora, RedHat.
+if exists dnf;then # Fedora, RedHat.
 dnf upgrade --refresh -y
 dnf clean all;dnf autoremove -y
 dnf repoquery --extras --qf '%{name}'|xargs dnf remove
 package-cleanup --orphans --leaves --cleandupes --noprompt
+fi
 
-elif exists apk;then # Alpine.
+if exists apk;then # Alpine.
 apk update;apk upgrade
 apk cache purge;apk del
+fi
 
-elif exists zypper;then # OpenSUSE.
+if exists pkg_add;then # OpenBSD.
+pkg_add -I -Uu;syspatch;fw_update
+pkg clean -a;pkg_delete -I -a
+rcctl restart unwind;arp -da
+fi
+
+if exists zypper;then # OpenSUSE.
 zypper refresh;zypper dist-upgrade -y
 zypper clean --all
+fi
 
-elif exists emerge;then # Gentoo.
+if exists emerge;then # Gentoo.
 emerge -a --sync;emerge -avuDN @world;emerge -a -c --ask --depclean
 eclean-dist -d;eclean-pkg
+fi
 
-elif exists xbps-install;then # Void Linux.
+if exists xbps-install;then # Void Linux.
 xbps-install -Syu;xbps-remove -Ooy;vkpurge rm all
+fi
 
-elif exists eopkg;then # Solis.
+if exists eopkg;then # Solis.
 eopkg ur -y;eopkg upgrade -y;eopkg rmo;eopkg dc
+fi
 
-elif exists slackpkg;then # Slackware.
+if exists slackpkg;then # Slackware.
 yes|slackpkg update;yes|slackpkg upgrade-all;slackpkg clean-system
-
-else
-echo There is no appropiate package manager for your system.
 fi
 
 if exists paccache;then
@@ -116,11 +129,11 @@ brew update;brew upgrade;brew upgrade --cask
 brew autoremove;brew cleanup --prune=all
 fi
 
-if exists yay;then # One of the most useful.
+if exists yay;then
 yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
 fi
 
-if exists paru;then # But better.
+if exists paru;then
 paru -Syu --noconfirm;paru -Runs $(paru -Qdtq) --noconfirm;paru -Scc --noconfirm
 fi
 
