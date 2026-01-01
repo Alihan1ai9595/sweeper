@@ -10,5 +10,5 @@ On apk --no-cache<br>
 Questions:<br>
 # Updating packages on MANAGER_NAME OS_NAME
 # Clearing cache on MANAGER_NAME OS_NAME
-# Clearing orphant packages on MANAGER_NAME OS_NAME
+# Clearing orphaned packages on MANAGER_NAME OS_NAME
 # How to bypass Yes/No prompt on MANAGER_NAME OS_NAME
