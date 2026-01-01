@@ -5,7 +5,7 @@
 # MM    MM  aaa aa  dddddd  eeeee    bbbbbb       yy     aaa aa lll 111 hh   hh 333333  nn   nn
 #                                             yyyyy
 # Support - al1h3n(tg,ds) | Donate me - paypal.me/al1h3n
-# Sweeper v1.0.2 - Additional output.
+# Sweeper v1.0.3 - Paru was added.
 # Part of the Cleanus Pack.
 # ==============================================================================
 
@@ -61,31 +61,31 @@ pacman -Syu --noconfirm;pacman -Runs $(pacman -Qdtq) --noconfirm;pacman -Scc --n
 elif exists apt;then # Debian, Ubuntu, Mint, ELementaryOS, Kali. Includes dpkg as well.
 apt update;apt full-upgrade -y;apt autoremove -y;apt clean;apt autoclean
 
-elif exists dnf;then # Fedora, RedHat
+elif exists dnf;then # Fedora, RedHat.
 dnf upgrade --refresh -y
 dnf clean all;dnf autoremove -y
 dnf repoquery --extras --qf '%{name}'|xargs dnf remove
 package-cleanup --orphans --leaves --cleandupes --noprompt
 
-elif exists apk;then # Alpine
+elif exists apk;then # Alpine.
 apk update;apk upgrade
 apk cache purge;apk del
 
-elif exists zypper;then # OpenSUSE
+elif exists zypper;then # OpenSUSE.
 zypper refresh;zypper dist-upgrade -y
 zypper clean --all
 
-elif exists emerge;then # Gentoo
+elif exists emerge;then # Gentoo.
 emerge -a --sync;emerge -avuDN @world;emerge -a -c --ask --depclean
 eclean-dist -d;eclean-pkg
 
-elif exists xbps-install;then # Void Linux
+elif exists xbps-install;then # Void Linux.
 xbps-install -Syu;xbps-remove -Ooy;vkpurge rm all
 
-elif exists eopkg;then # Solis
+elif exists eopkg;then # Solis.
 eopkg ur -y;eopkg upgrade -y;eopkg rmo;eopkg dc
 
-elif exists slackpkg;then # Slackware
+elif exists slackpkg;then # Slackware.
 yes|slackpkg update;yes|slackpkg upgrade-all;slackpkg clean-system
 
 else
@@ -95,15 +95,15 @@ fi
 if exists paccache;then
 paccache -ruk0;paccache -rk1
 echo -e "${GREEN}Space saved: $(saved /var/cache/pacman/pkg)${RESET}"
-# Delete removed packages from disk, keep 2 recent versions
-# Uses pacman-contrib
+# Delete removed packages from disk, keep 2 recent versions.
+# Uses pacman-contrib.
 fi
 
-if exists apt-get;then # Older manager of Debian family
+if exists apt-get;then # Older manager of Debian family.
 apt-get full-upgrade -y;apt-get autoremove -y;apt-get clean
 fi
 
-if exists flatpak;then # Additional PMs
+if exists flatpak;then # Additional PMs.
 flatpak update -y;flatpak uninstall -y --unused
 fi
 
@@ -116,8 +116,12 @@ brew update;brew upgrade;brew upgrade --cask
 brew autoremove;brew cleanup --prune=all
 fi
 
-if exists yay;then # One of the most useful
+if exists yay;then # One of the most useful.
 yay -Syu --noconfirm;yay -Runs $(yay -Qdtq) --noconfirm;yay -Scc --noconfirm
+fi
+
+if exists paru;then # But better.
+paru -Syu --noconfirm;paru -Runs $(paru -Qdtq) --noconfirm;paru -Scc --noconfirm
 fi
 
 echo -e "\n\033[38;5;46m==========================================${RESET}"
